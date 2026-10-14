@@ -8,7 +8,7 @@ Each creation is a **peak**, as high as its **working days** (the days git saw i
 
 The sky is real: the sun and moon of the chosen place, at its local time. By day the survey is a contour map shaded by the sun. At nightfall it turns to a forge, under the moon and its phase.
 
-Live example: [davidvuillet.fr/voyage](https://davidvuillet.fr/voyage/) · *Français : [LISEZMOI.md](LISEZMOI.md)*
+Demo: [labskull-33.github.io/le-releve](https://labskull-33.github.io/le-releve/) · in context: [davidvuillet.fr/voyage](https://davidvuillet.fr/voyage/) · *Français : [LISEZMOI.md](LISEZMOI.md)*
 
 ## Try it
 

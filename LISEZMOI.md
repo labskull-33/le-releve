@@ -8,7 +8,7 @@ Chaque création est un **sommet**, aussi haut que ses **jours de travail** (les
 
 Le ciel est vrai : le soleil et la lune du lieu choisi, à son heure. Le jour, le relevé est un plan coté que le soleil ombre. La nuit tombée, il passe à la forge, sous la lune et dans sa phase.
 
-Exemple en ligne : [davidvuillet.fr/voyage](https://davidvuillet.fr/voyage/) · *English: [README.md](README.md)*
+Démo : [labskull-33.github.io/le-releve](https://labskull-33.github.io/le-releve/) · en situation : [davidvuillet.fr/voyage](https://davidvuillet.fr/voyage/) · *English: [README.md](README.md)*
 
 ## Essayer
 
