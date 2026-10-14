@@ -186,8 +186,12 @@ placerCiel(oeuvre.ciel ?? {});
 
 const $ = (id) => document.getElementById(id);
 // ── français / anglais : retenu d'une visite à l'autre ──
-let langue = 'fr';
-try { if (localStorage.getItem('releve-langue') === 'en') langue = 'en'; } catch (e) {}
+// la langue : ?lang=fr|en dans l'adresse, sinon le dernier choix du visiteur, sinon celle d'oeuvre.json
+const langues = ['fr', 'en'];
+let langue = langues.includes(oeuvre.langue) ? oeuvre.langue : 'fr';
+try { const l = localStorage.getItem('releve-langue'); if (langues.includes(l)) langue = l; } catch (e) {}
+const demandee = new URLSearchParams(location.search).get('lang');
+if (langues.includes(demandee)) langue = demandee;
 const T = {
   fr: { titre: `Le voyage — ${AUTEUR}`, nom: 'Le voyage', h1: 'Le voyage dans <em>l’œuvre.</em>',
     invite: `Chaque création est un sommet, haut de ses jours de travail, posé sur la fleur au compas. Suivez les cercles d’un sommet à l’autre ; le ciel est celui de ${LIEU}, à cette heure.`,

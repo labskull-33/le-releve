@@ -49,6 +49,7 @@ Tout se règle dans **`oeuvre.json`**. La page n'a rien à changer.
 - **`url`** : l'adresse de la création, relative à `site`. Elle s'ouvre dans la planche, puis en grand.
 - **`releve`** : où compter ses jours. Un dépôt de `depots` (chemin relatif à `oeuvre.json`) et des `chemins` dans ce dépôt (`"."` = tout le dépôt, `":!dossier"` = sauf ce dossier), ou un `"grep"` sur les messages des commits. Les jours de plusieurs sources s'additionnent sans doublon.
 - **`depots.local.json`** (facultatif, hors de git) : les mêmes noms de dépôts avec leurs chemins sur votre machine, s'ils diffèrent de ceux d'`oeuvre.json`.
+- **`langue`** : `"fr"` ou `"en"`, la langue à l'arrivée (le visiteur peut changer ; `?lang=fr` dans l'adresse l'impose).
 - **`ciel`** : le lieu du soleil et de la lune, et son fuseau horaire.
 
 ## Relever les jours

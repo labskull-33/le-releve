@@ -27,6 +27,7 @@ Open http://localhost:8000. Any static host works, GitHub Pages included (Settin
 Everything lives in **`oeuvre.json`** ("the work"); the page needs no change. Field names are French:
 
 - **`auteur`** (author: `nom` = name, `site`), **`site`**: the base address of your creations.
+- **`langue`**: `"fr"` or `"en"`, the language on arrival (visitors can switch; `?lang=fr` in the address forces it).
 - **`ciel`** (sky): `lieu` (place name), `latitude`, `longitude`, `fuseau` (IANA time zone).
 - **`depots`** (repositories): names → paths relative to `oeuvre.json`.
 - **`creations`**, in order:
