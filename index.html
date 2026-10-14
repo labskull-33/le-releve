@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.min.js" } }</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le relevé</title>
+<meta name="theme-color" content="#e7ddcd">
+<!-- Le relevé — https://github.com/labskull-33/le-releve
+     Une œuvre levée en relief sur la fleur de vie : chaque création est un sommet, haut de ses jours de travail
+     (relevés dans git par relever.mjs), posé au compas. On vole d'un sommet à l'autre le long des cercles.
+     Le ciel est vrai : soleil et lune du lieu choisi, à son heure ; la nuit tombée, le relief passe à la forge.
+     Tout se règle dans oeuvre.json ; cette page n'a rien à changer. Né sur davidvuillet.fr/voyage/ le 12/10/2026. -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-16 -16 32 32'%3E%3Crect x='-16' y='-16' width='32' height='32' rx='7' fill='%23181717'/%3E%3Cg transform='scale(1.25)' fill='none' stroke='%23e7ddcd' stroke-width='1'%3E%3Ccircle r='5'/%3E%3Ccircle cy='-5' r='5'/%3E%3Ccircle cy='5' r='5'/%3E%3Ccircle cx='4.33' cy='-2.5' r='5'/%3E%3Ccircle cx='4.33' cy='2.5' r='5'/%3E%3Ccircle cx='-4.33' cy='-2.5' r='5'/%3E%3Ccircle cx='-4.33' cy='2.5' r='5'/%3E%3Ccircle r='10' stroke='%23c98a52' stroke-width='1.6'/%3E%3C/g%3E%3C/svg%3E">
+<style>
+@font-face { font-family: "Manrope"; src: url("polices/manrope-variable.woff2") format("woff2"); font-weight: 200 800; font-display: swap; }
+@font-face { font-family: "Instrument Serif"; src: url("polices/instrument-serif.woff2") format("woff2"); font-display: swap; }
+@font-face { font-family: "Instrument Serif"; font-style: italic; src: url("polices/instrument-serif-italique.woff2") format("woff2"); font-display: swap; }
+@font-face { font-family: "DM Mono"; src: url("polices/dm-mono.woff2") format("woff2"); font-display: swap; }
+:root {
+  --papier: #e7ddcd; --charbon: #181717; --encre: #2b2826; --bronze: #a8672f; --sentier: #c2361f;
+  --fond: var(--papier); --texte: var(--encre); --trait: color-mix(in srgb, var(--encre) 30%, transparent); --accent: var(--sentier);
+  --mono: "DM Mono", ui-monospace, monospace; --serif: "Instrument Serif", Georgia, serif;
+}
+html[data-theme="sombre"] { --fond: var(--charbon); --texte: #f3e2c8; --trait: color-mix(in srgb, #f3e2c8 28%, transparent); --accent: #e2b857; }
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; overflow: hidden; background: var(--fond); color: var(--texte); transition: background .6s ease, color .6s ease; }
+body { font: 13px/1.45 var(--mono); }
+#releve { position: fixed; inset: 0; --font-mono: var(--mono); --font-display: var(--serif); }
+#releve .c20 .legende { left: 28px; right: auto; bottom: 96px; }
+#releve .c20 .commandes { top: 62px; right: 28px; }
+#releve .c20 .commandes p { background: none; }
+#releve .c20 .horloge { top: 102px; right: 28px; }
+
+.haut { position: fixed; left: 18px; top: 14px; z-index: 5; display: flex; align-items: baseline; gap: 14px; padding: 8px 10px; background: color-mix(in srgb, var(--fond) 88%, transparent); pointer-events: none; }
+.haut a { pointer-events: auto; color: inherit; text-decoration: none; font: 600 15px/1 Manrope, system-ui, sans-serif; letter-spacing: -.01em; }
+.haut a em { font: italic 400 18px/1 var(--serif); }
+.haut span { font: 10px/1 var(--mono); text-transform: uppercase; letter-spacing: .12em; opacity: .7; }
+
+/* l'invitation, à l'arrivée */
+.invite { position: fixed; left: 28px; top: 92px; z-index: 4; max-width: 360px; pointer-events: none; transition: opacity .8s ease; }
+.invite h1 { margin: 0 0 10px; font: 400 44px/1 var(--serif); letter-spacing: -.01em; }
+.invite h1 em { font-style: italic; color: var(--accent); }
+.invite p { margin: 0; font-size: 12px; opacity: .8; }
+/* partir : l'entrée du voyage, un vrai bouton ; il paraît quand la fleur est levée, un reflet le traverse une fois */
+.partir { position: relative; overflow: hidden; display: inline-flex; align-items: center; gap: 12px; margin-top: 22px; padding: 14px 24px; border: 0; border-radius: 5px; background: var(--accent); color: var(--fond); font: 500 14px/1 var(--mono); letter-spacing: .06em; cursor: pointer; pointer-events: auto; opacity: 0; transform: translateY(8px); transition: opacity .6s ease, transform .6s ease, filter .2s ease; }
+.partir span:last-child { transition: transform .25s ease; }
+.partir:hover, .partir:focus-visible { filter: brightness(1.08); outline: none; }
+.partir:hover span:last-child { transform: translateX(5px); }
+.partir::after { content: ''; position: absolute; inset: -2px auto -2px -60%; width: 45%; background: linear-gradient(100deg, transparent, rgb(255 255 255 / .55), transparent); transform: skewX(-18deg); opacity: 0; pointer-events: none; }
+body.pret .partir { opacity: 1; transform: none; }
+body.pret .partir::after { animation: eclat .9s cubic-bezier(.3,.6,.3,1) .7s 1; }
+body.pret .partir { animation: appel 1.2s ease .8s 1; }
+.partir:hover::after { animation: eclat .9s cubic-bezier(.3,.6,.3,1) 1; }
+/* tant qu'on n'est pas parti, le compas se signale : un liseré à la couleur de l'écriture */
+body.pret:not(.en-route) .compas { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+body.pret:not(.en-route) .compas > button { color: var(--accent); }
+@media (prefers-reduced-motion: reduce) { .partir, .partir::after { animation: none !important; } }
+body.en-route .invite { opacity: 0; }
+
+/* le compas : d'un sommet à l'autre, dans l'ordre du tracé */
+.compas { position: fixed; left: 50%; bottom: 26px; z-index: 5; transform: translateX(-50%); display: flex; align-items: stretch; border: 1px solid var(--trait); background: color-mix(in srgb, var(--fond) 88%, transparent); transition: transform .5s ease; }
+.compas button { min-width: 44px; padding: 0 14px; border: 0; background: none; color: inherit; font: 15px/1 var(--mono); cursor: pointer; }
+.compas button:hover { background: color-mix(in srgb, currentColor 8%, transparent); }
+.compas .ici { min-width: 280px; padding: 9px 16px 10px; border-left: 1px solid var(--trait); border-right: 1px solid var(--trait); text-align: center; }
+.compas .ici b { display: block; font: italic 400 21px/1.1 var(--serif); }
+.compas .ici small { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; opacity: .7; }
+.compas .ici button { min-width: 0; padding: 4px 0 0; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.compas .ici button:hover { background: none; text-decoration: underline; text-underline-offset: 3px; }
+body.ouverte .compas { transform: translateX(calc(-50% - 23vw)); }
+
+/* la planche : la création ouverte sur place, dans le paysage */
+.planche { position: fixed; top: 84px; right: 28px; bottom: 26px; width: min(46vw, 900px); z-index: 6; display: grid; grid-template-rows: auto 1fr; border: 1px solid var(--trait); background: var(--fond); box-shadow: 0 24px 60px rgb(0 0 0 / .22); opacity: 0; transform: translateY(24px); pointer-events: none; transition: opacity .45s ease, transform .55s cubic-bezier(.2,.7,.2,1); }
+body.ouverte .planche { opacity: 1; transform: none; pointer-events: auto; }
+.cartouche { display: grid; grid-template-columns: 1fr auto; gap: 4px 18px; padding: 14px 18px 12px; border-bottom: 1px solid var(--trait); }
+.cartouche small { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; opacity: .7; }
+.cartouche h2 { grid-column: 1; margin: 0; font: 400 30px/1.05 var(--serif); }
+.cartouche h2 em { color: var(--accent); }
+.cartouche p { grid-column: 1; margin: 2px 0 0; font-size: 12px; opacity: .85; max-width: 60ch; }
+.cartouche .actions { grid-column: 2; grid-row: 1 / span 3; display: flex; flex-direction: column; align-items: flex-end; justify-content: space-between; gap: 8px; }
+.cartouche .fermer { width: 30px; height: 30px; border: 1px solid var(--trait); border-radius: 5px; background: none; color: inherit; font: 16px/1 var(--mono); cursor: pointer; }
+.cartouche .entrer { display: inline-flex; align-items: center; gap: 10px; padding: 11px 18px; border-radius: 5px; background: var(--accent); color: var(--fond); font: 500 12px/1 var(--mono); letter-spacing: .06em; text-decoration: none; white-space: nowrap; transition: filter .2s ease, transform .2s ease; }
+.cartouche .entrer { position: relative; overflow: hidden; }
+.cartouche .entrer span { transition: transform .25s ease; }
+.cartouche .entrer::after { content: ''; position: absolute; inset: -2px auto -2px -60%; width: 45%; background: linear-gradient(100deg, transparent, rgb(255 255 255 / .55), transparent); transform: skewX(-18deg); opacity: 0; pointer-events: none; }
+.cartouche .entrer.eclat::after, .cartouche .entrer:hover::after { animation: eclat .9s cubic-bezier(.3,.6,.3,1) 1; }
+.cartouche .entrer.eclat { animation: appel 1.1s ease .15s 1; }
+@keyframes eclat { 0% { left: -60%; opacity: 1; } 100% { left: 120%; opacity: 1; } }
+@keyframes appel { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent); } 40% { box-shadow: 0 0 0 7px color-mix(in srgb, var(--accent) 0%, transparent); } }
+@media (prefers-reduced-motion: reduce) { .cartouche .entrer::after, .cartouche .entrer.eclat { animation: none !important; } }
+/* dedans : la création prend tout l'écran ; une barre ramène au tracé, à la même place */
+.planche.decoupe { transition: clip-path .6s cubic-bezier(.6,0,.2,1) !important; }
+.barre { display: none; align-items: center; gap: 16px; padding: 8px 14px; border-bottom: 1px solid var(--trait); }
+.barre button { display: inline-flex; align-items: center; gap: 10px; padding: 9px 14px; border: 1px solid var(--trait); border-radius: 5px; background: none; color: inherit; font: 500 12px/1 var(--mono); letter-spacing: .04em; cursor: pointer; }
+.barre button:hover { background: color-mix(in srgb, currentColor 8%, transparent); }
+.barre b { font: italic 400 20px/1 var(--serif); }
+.barre a { margin-left: auto; color: var(--accent); font-size: 11px; letter-spacing: .06em; text-decoration: none; }
+.barre a:hover { text-decoration: underline; text-underline-offset: 3px; }
+body.dedans .planche { top: 0; right: 0; left: 0; bottom: 0; width: 100vw; border: 0; box-shadow: none; grid-template-rows: auto 1fr; }
+body.dedans .cartouche { display: none; }
+body.dedans .barre { display: flex; }
+body.dedans .compas, body.dedans .haut, body.dedans .pied { opacity: 0; pointer-events: none; }
+.cartouche .entrer:hover { filter: brightness(1.08); }
+.cartouche .entrer:hover span { transform: translateX(4px); }
+.vue { position: relative; overflow: hidden; background: color-mix(in srgb, var(--texte) 5%, var(--fond)); }
+.vue iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #fff; }
+.vue .bientot { position: absolute; inset: 0; display: grid; place-content: center; gap: 10px; text-align: center; padding: 40px; }
+.vue .bientot b { font: italic 400 26px/1.1 var(--serif); }
+.vue .bientot span { font-size: 11px; opacity: .7; }
+
+.langues { position: fixed; top: 14px; right: 18px; z-index: 5; display: flex; align-items: center; gap: 4px; padding: 0 6px; background: color-mix(in srgb, var(--fond) 88%, transparent); font: 10px var(--mono); text-transform: uppercase; }
+.langues button { padding: 10px 4px; border: 0; background: none; color: inherit; opacity: .55; font: inherit; letter-spacing: .04em; text-transform: inherit; cursor: pointer; transition: opacity .2s; }
+.langues button[aria-pressed="true"] { opacity: 1; }
+.langues button:hover, .langues button:focus-visible { opacity: 1; text-decoration: line-through; }
+.langues button[aria-pressed="true"]:hover { text-decoration: none; }
+body.dedans .langues { opacity: 0; pointer-events: none; }
+.pied { position: fixed; left: 28px; bottom: 26px; z-index: 5; font-size: 10px; letter-spacing: .04em; opacity: .7; }
+.pied a { color: inherit; text-decoration: none; display: inline-flex; gap: 6px; align-items: center; }
+.pied svg { width: 1.1em; height: 1.1em; fill: #D97757; }
+/* la surbrillance des boutons de navigation, comme les boutons pour remonter de /trace/ : un aplat bronze */
+html[data-theme="sombre"] { --bronze: #c98a52; }
+:root { --bronze: #b77a45; }
+.compas > button, .compas .ici button, .barre button, .cartouche .fermer, #releve .c20 .commandes button { transition: background .2s ease, border-color .2s ease, color .2s ease; }
+.compas > button:hover, .compas > button:focus-visible,
+.barre button:hover, .barre button:focus-visible,
+.cartouche .fermer:hover, .cartouche .fermer:focus-visible,
+#releve .c20 .commandes button:hover, #releve .c20 .commandes button:focus-visible { background: var(--bronze); border-color: var(--bronze); color: var(--papier); outline: none; }
+.compas .ici button:hover, .compas .ici button:focus-visible { padding: 4px 8px 3px; margin-top: 2px; background: var(--bronze); color: var(--papier); text-decoration: none; outline: none; }
+@media (max-width: 900px) {
+  .planche { left: 12px; right: 12px; width: auto; top: 70px; bottom: 96px; }
+  body.ouverte .compas { transform: translateX(-50%); }
+  .compas .ici { min-width: 0; }
+  .invite h1 { font-size: 34px; }
+}
+</style>
+<script>
+// une première écriture selon l'heure d'ici, le temps que le ciel du lieu soit calculé
+(() => { const h = +new Intl.DateTimeFormat('fr-FR', { hour: 'numeric', hourCycle: 'h23' }).format(new Date()); if (h >= 20 || h < 7) document.documentElement.dataset.theme = 'sombre'; })();
+</script>
+</head>
+<body>
+<div id="releve"></div>
+
+<header class="haut"><a href="#" id="accueil"></a><span data-t="nom"></span></header>
+
+<div class="langues" role="group" aria-label="Langue"><button type="button" data-langue="fr" aria-pressed="true">FR</button><span aria-hidden="true">/</span><button type="button" data-langue="en" aria-pressed="false">EN</button></div>
+
+<div class="invite">
+  <h1 data-t="h1"></h1>
+  <p data-t="invite"></p>
+  <button type="button" class="partir" id="partir"><span data-t="partir"></span> <span aria-hidden="true">→</span></button>
+</div>
+
+<nav class="compas" id="compas">
+  <button type="button" id="prec">←</button>
+  <div class="ici"><small id="rang"></small><b id="nom"></b><button type="button" id="ouvrir" hidden></button></div>
+  <button type="button" id="suiv">→</button>
+</nav>
+
+<section class="planche" id="planche">
+  <div class="cartouche">
+    <small id="p-meta"></small>
+    <h2 id="p-titre"></h2>
+    <p id="p-texte"></p>
+    <div class="actions"><button type="button" class="fermer" id="fermer">×</button><a class="entrer" id="entrer" href="#">Entrer</a></div>
+  </div>
+  <div class="barre"><button type="button" id="revenir"><span aria-hidden="true">←</span> <span data-t="revenir"></span></button><b id="b-nom"></b><a id="onglet" href="#" target="_blank" rel="noopener" data-t="onglet"></a></div>
+  <div class="vue" id="vue"></div>
+</section>
+
+<p class="pied"><a href="https://www.anthropic.com" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4.7144 15.9555 4.7174-2.6471.079-.2307-.079-.1275h-.2307l-.7893-.0486-2.6956-.0729-2.3375-.0971-2.2646-.1214-.5707-.1215-.5343-.7042.0546-.3522.4797-.3218.686.0608 1.5179.1032 2.2767.1578 1.6514.0972 2.4468.255h.3886l.0546-.1579-.1336-.0971-.1032-.0972L6.973 9.8356l-2.55-1.6879-1.3356-.9714-.7225-.4918-.3643-.4614-.1578-1.0078.6557-.7225.8803.0607.2246.0607.8925.686 1.9064 1.4754 2.4893 1.8336.3643.3035.1457-.1032.0182-.0728-.164-.2733-1.3539-2.4467-1.445-2.4893-.6435-1.032-.17-.6194c-.0607-.255-.1032-.4674-.1032-.7285L6.287.1335 6.6997 0l.9957.1336.419.3642.6192 1.4147 1.0018 2.2282 1.5543 3.0296.4553.8985.2429.8318.091.255h.1579v-.1457l.1275-1.706.2368-2.0947.2307-2.6957.0789-.7589.3764-.9107.7468-.4918.5828.2793.4797.686-.0668.4433-.2853 1.8517-.5586 2.9021-.3643 1.9429h.2125l.2429-.2429.9835-1.3053 1.6514-2.0643.7286-.8196.85-.9046.5464-.4311h1.0321l.759 1.1293-.34 1.1657-1.0625 1.3478-.8804 1.1414-1.2628 1.7-.7893 1.36.0729.1093.1882-.0183 2.8535-.607 1.5421-.2794 1.8396-.3157.8318.3886.091.3946-.3278.8075-1.967.4857-2.3072.4614-3.4364.8136-.0425.0304.0486.0607 1.5482.1457.6618.0364h1.621l3.0175.2247.7892.522.4736.6376-.079.4857-1.2142.6193-1.6393-.3886-3.825-.9107-1.3113-.3279h-.1822v.1093l1.0929 1.0686 2.0035 1.8092 2.5075 2.3314.1275.5768-.3218.4554-.34-.0486-2.2039-1.6575-.85-.7468-1.9246-1.621h-.1275v.17l.4432.6496 2.3436 3.5214.1214 1.0807-.17.3521-.6071.2125-.6679-.1214-1.3721-1.9246L14.38 17.959l-1.1414-1.9428-.1397.079-.674 7.2552-.3156.3703-.7286.2793-.6071-.4614-.3218-.7468.3218-1.4753.3886-1.9246.3157-1.53.2853-1.9004.17-.6314-.0121-.0425-.1397.0182-1.4328 1.9672-2.1796 2.9446-1.7243 1.8456-.4128.164-.7164-.3704.0667-.6618.4008-.5889 2.386-3.0357 1.4389-1.882.929-1.0868-.0062-.1579h-.0546l-6.3385 4.1164-1.1293.1457-.4857-.4554.0608-.7467.2307-.2429 1.9064-1.3114Z"/></svg><span data-t="claude"></span></a></p>
+
+<script type="module">
+// L'œuvre : tout vient de oeuvre.json (auteur, site, ciel, créations dans l'ordre du tracé) et jours.json (relever.mjs)
+const [oeuvre, j, { releve, nuitA, placerCiel }] = await Promise.all([
+  fetch('oeuvre.json', { cache: 'no-cache' }).then((r) => r.json()),
+  fetch('jours.json', { cache: 'no-cache' }).then((r) => (r.ok ? r.json() : null)).catch(() => null),
+  import('./src/releve.js'),
+]);
+const OEUVRE = oeuvre.creations;
+const SITE = oeuvre.site ?? location.href;
+const adresse = (c) => new URL(c.url, SITE).href;
+const AUTEUR = oeuvre.auteur?.nom ?? '';
+const LIEU = oeuvre.ciel?.lieu ?? 'Paris';
+placerCiel(oeuvre.ciel ?? {});
+
+const $ = (id) => document.getElementById(id);
+// ── français / anglais : retenu d'une visite à l'autre ──
+let langue = 'fr';
+try { if (localStorage.getItem('releve-langue') === 'en') langue = 'en'; } catch (e) {}
+const T = {
+  fr: { titre: `Le voyage — ${AUTEUR}`, nom: 'Le voyage', h1: 'Le voyage dans <em>l’œuvre.</em>',
+    invite: `Chaque création est un sommet, haut de ses jours de travail, posé sur la fleur au compas. Suivez les cercles d’un sommet à l’autre ; le ciel est celui de ${LIEU}, à cette heure.`,
+    partir: 'Partir', ensemble: 'Vue d’ensemble', fleur: 'La fleur entière', sommet: 'Sommet', j: 'j', jours: 'jours de travail', ouvrir: 'Ouvrir ici', entrer: 'Entrer dans',
+    revenir: 'Revenir au tracé', onglet: 'Ouvrir dans un onglet ↗', claude: 'Fait avec Claude', langue: 'Langue', accueil: `${AUTEUR}, accueil`,
+    compas: 'D’un sommet à l’autre', prec: 'Sommet précédent', suiv: 'Sommet suivant', planche: 'La création ouverte', fermer: 'Refermer' },
+  en: { titre: `The journey — ${AUTEUR}`, nom: 'The journey', h1: 'A journey through <em>the work.</em>',
+    invite: `Each creation is a peak, as high as its working days, set on the flower with a compass. Follow the circles from one peak to the next; the sky is the ${LIEU} sky, at this very hour.`,
+    partir: 'Set off', ensemble: 'Whole view', fleur: 'The whole flower', sommet: 'Peak', j: 'd', jours: 'working days', ouvrir: 'Open here', entrer: 'Enter',
+    revenir: 'Back to the map', onglet: 'Open in a new tab ↗', claude: 'Made with Claude', langue: 'Language', accueil: `${AUTEUR}, home`,
+    compas: 'From one peak to the next', prec: 'Previous peak', suiv: 'Next peak', planche: 'The open creation', fermer: 'Close' },
+};
+const t = (k) => T[langue][k];
+const dans = (c) => ({ nom: c.nom, ...c.fr, ...(langue === 'en' ? c.en : {}) }); // une création dans la langue choisie
+function appliquerLangue() {
+  document.documentElement.lang = langue;
+  document.title = t('titre');
+  document.querySelectorAll('[data-t]').forEach((el) => { el.innerHTML = t(el.dataset.t); });
+  document.querySelectorAll('.langues [data-langue]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.langue === langue)));
+  document.querySelector('.langues').setAttribute('aria-label', t('langue'));
+  $('accueil').setAttribute('aria-label', t('accueil'));
+  $('compas').setAttribute('aria-label', t('compas'));
+  $('prec').setAttribute('aria-label', t('prec'));
+  $('suiv').setAttribute('aria-label', t('suiv'));
+  $('planche').setAttribute('aria-label', t('planche'));
+  $('fermer').setAttribute('aria-label', t('fermer'));
+}
+const jours = j?.jours;
+
+let theme = document.documentElement.dataset.theme === 'sombre' ? 'sombre' : 'clair';
+let pilote = null;
+let arret = null;
+let instant = null;
+let focus = -1;
+let cible = -1; // le dernier sommet demandé (un vol peut être en cours)
+let ouverte = -1;
+const largeurPlanche = () => (innerWidth > 900 ? $('releve').clientWidth * 0.23 + 14 : 0);
+
+function appliquerTheme(t) {
+  theme = t;
+  document.documentElement.dataset.theme = t === 'sombre' ? 'sombre' : '';
+  document.querySelector('meta[name="theme-color"]').content = t === 'sombre' ? '#181717' : '#e7ddcd';
+}
+
+function monter(leve) {
+  arret?.();
+  $('releve').innerHTML = '';
+  pilote = {};
+  arret = releve($('releve'), {
+    theme, pilote, jours, instant, langue, noms: Object.fromEntries(OEUVRE.map((o) => [o.nom, dans(o).nom])), trace: OEUVRE.map((c) => [c.nom, c.pas, c.url]), site: SITE.replace(/\/$/, ''), voyage: true,
+    surFocus: (k) => { focus = k; if (k >= 0) cible = k; majCompas(); },
+    ouvrir: (k) => ouvrirPlanche(k),
+    decalage: () => (ouverte >= 0 ? largeurPlanche() : 0),
+    surNuit: ({ theme: t, instant: i }) => { instant = i; appliquerTheme(t); const k = focus; monter(true); if (k >= 0) setTimeout(() => pilote.allerA(k), 400); },
+  });
+  if (leve) pilote.lever();
+}
+
+function majCompas() {
+  const k = focus;
+  $('rang').textContent = k < 0 ? t('ensemble') : `${t('sommet')} ${k + 1} / ${OEUVRE.length} · ${jours?.[OEUVRE[k].nom] ?? ''} ${t('j')}`;
+  $('nom').textContent = k < 0 ? t('fleur') : dans(OEUVRE[k]).nom;
+  $('ouvrir').hidden = k < 0;
+  $('ouvrir').textContent = t('ouvrir');
+  if (k >= 0) document.body.classList.add('en-route');
+}
+
+function ouvrirPlanche(k) {
+  const o = dans(OEUVRE[k]);
+  ouverte = k;
+  $('p-meta').textContent = `${t('sommet')} ${k + 1} · ${jours?.[OEUVRE[k].nom] ?? '?'} ${t('jours')}`;
+  $('p-titre').innerHTML = o.titre;
+  $('p-texte').textContent = o.texte;
+  $('entrer').href = adresse(OEUVRE[k]);
+  const vue = $('vue');
+  vue.innerHTML = `<iframe title="${o.nom}" allow="autoplay; fullscreen"></iframe>`;
+  const cadre = vue.querySelector('iframe');
+  setTimeout(() => { if (ouverte === k) cadre.src = adresse(OEUVRE[k]); }, 480);
+  $('entrer').innerHTML = `${t('entrer')} ${o.nom} <span aria-hidden="true">→</span>`;
+  $('onglet').href = adresse(OEUVRE[k]);
+  $('b-nom').textContent = o.nom;
+  document.body.classList.add('ouverte');
+  const e = $('entrer');
+  e.classList.remove('eclat');
+  setTimeout(() => e.classList.add('eclat'), 450); // une fois, quand la planche est posée
+}
+// Entrer : la création prend tout l'écran ; le relief reste dessous, à sa place, et « Revenir au tracé » le rend tel quel
+// L'agrandissement : la planche prend d'un coup sa taille plein écran (l'iframe ne se refait qu'une fois) et se
+// découvre depuis son ancienne place par un découpage qui s'ouvre ; au retour, le découpage se referme, puis elle se
+// repose. Rien ne se redimensionne pendant le mouvement, le texte ne se déforme pas.
+let place = null; // l'ancienne place de la planche, à l'écran
+const decoupe = (r) => `inset(${r.top}px ${innerWidth - r.right}px ${innerHeight - r.bottom}px ${r.left}px)`;
+function basculer(dedans) {
+  const pl = document.querySelector('.planche');
+  if (dedans) {
+    place = pl.getBoundingClientRect();
+    pl.classList.remove('decoupe');
+    document.body.classList.add('dedans');
+    pl.style.clipPath = decoupe(place);
+    pl.getBoundingClientRect();
+    pl.classList.add('decoupe');
+    pl.style.clipPath = 'inset(0px 0px 0px 0px)';
+    pl.addEventListener('transitionend', () => { pl.classList.remove('decoupe'); pl.style.clipPath = ''; }, { once: true });
+    // dedans, le relief caché ne dessine plus : toute la machine va à la création
+    setTimeout(() => document.body.classList.contains('dedans') && pilote?.pause?.(true), 650);
+  } else {
+    pilote?.pause?.(false);
+    pl.style.clipPath = 'inset(0px 0px 0px 0px)';
+    pl.getBoundingClientRect();
+    pl.classList.add('decoupe');
+    pl.style.clipPath = decoupe(place);
+    pl.addEventListener('transitionend', () => { pl.classList.remove('decoupe'); document.body.classList.remove('dedans'); pl.style.clipPath = ''; }, { once: true });
+  }
+}
+function entrer(ev) {
+  ev?.preventDefault();
+  basculer(true);
+}
+function revenir() {
+  basculer(false);
+}
+$('entrer').addEventListener('click', entrer);
+$('revenir').addEventListener('click', revenir);
+function fermerPlanche() {
+  ouverte = -1;
+  if (document.body.classList.contains('dedans')) { document.body.classList.remove('dedans'); pilote?.pause?.(false); }
+  document.body.classList.remove('ouverte');
+  setTimeout(() => { if (ouverte < 0) $('vue').innerHTML = ''; }, 500);
+}
+
+const pas = (d) => {
+  fermerPlanche();
+  const n = OEUVRE.length;
+  cible = cible < 0 ? (d > 0 ? 0 : n - 1) : (cible + d + n) % n;
+  $('nom').textContent = dans(OEUVRE[cible]).nom; // le nom annonce la destination pendant le vol
+  pilote.allerA(cible);
+};
+$('prec').addEventListener('click', () => pas(-1));
+// Partir : le premier vol, vers Le trait, d'où partent tous les pas du compas
+$('partir').addEventListener('click', () => { document.body.classList.add('en-route'); pas(1); });
+$('suiv').addEventListener('click', () => pas(1));
+$('ouvrir').addEventListener('click', () => focus >= 0 && ouvrirPlanche(focus));
+$('fermer').addEventListener('click', fermerPlanche);
+addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape') return;
+  if (document.body.classList.contains('dedans')) { e.stopImmediatePropagation(); revenir(); }
+  else if (ouverte >= 0) { e.stopImmediatePropagation(); fermerPlanche(); }
+}, true);
+
+document.querySelector('.langues').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-langue]');
+  if (!b || b.dataset.langue === langue) return;
+  langue = b.dataset.langue;
+  try { localStorage.setItem('releve-langue', langue); } catch (err) {}
+  appliquerLangue();
+  majCompas();
+  const k = focus;
+  const rouvrir = ouverte;
+  instant = pilote?.instant?.() ?? instant;
+  monter(true);
+  if (k >= 0) setTimeout(() => pilote.allerA(k), 400);
+  if (rouvrir >= 0) ouvrirPlanche(rouvrir);
+});
+$('accueil').textContent = AUTEUR;
+$('accueil').href = SITE;
+appliquerLangue();
+majCompas();
+
+// l'arrivée : la fleur à plat dans l'écriture de l'heure, puis elle se lève
+const ecriture = nuitA() ? 'sombre' : 'clair';
+if (ecriture !== theme) appliquerTheme(ecriture);
+monter(false);
+setTimeout(() => pilote.lever(), 1300);
+setTimeout(() => document.body.classList.add('pret'), 2600); // la fleur levée, l'invitation à partir
+</script>
+</body>
+</html>

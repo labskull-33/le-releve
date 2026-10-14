@@ -1,0 +1,21 @@
+// Réglages de l'expérience 20 — valeurs par défaut du panneau
+export default {
+  hauteur: { label: "Hauteur du plus haut sommet, levé (× pas)", value: 1, min: 0.2, max: 2, step: 0.05 },
+  pointe: { label: "Pointe des sommets (2 = cloche, 1 = aiguille)", value: 1.15, min: 0.7, max: 2.5, step: 0.05 },
+  largeur: { label: "Largeur des montagnes (× pas)", value: 0.34, min: 0.15, max: 0.8, step: 0.01 },
+  ravines: { label: "Ravines sur les flancs", value: 0.4, min: 0, max: 1, step: 0.02 },
+  equidistance: { label: "Équidistance des courbes (jours)", value: 0.5, min: 0.2, max: 2, step: 0.05 },
+  trait: { label: "Épaisseur des courbes (px)", value: 0.85, min: 0.3, max: 3, step: 0.05 },
+  fleur: { label: "Fleur de vie (intensité)", value: 1, min: 0, max: 3, step: 0.05 },
+  estompage: { label: "Estompage du relief", value: 0.8, min: 0, max: 1, step: 0.02, only: "pose" },
+  soleil: { label: "Course du soleil et ombres portées (relief levé)", value: 1, min: 0, max: 1, step: 0.05, only: "pose" },
+  portee: { label: "Ombres portées : force du lavis", value: 0.75, min: 0, max: 1, step: 0.05, only: "pose" },
+  dome: { label: "Voûte du soleil : hauteur (× rayon)", value: 0.55, min: 0.2, max: 1, step: 0.05, only: "pose" },
+  inclinaison: { label: "Inclinaison, relief levé (°)", value: 62, min: 0, max: 80, step: 1, only: "pose" },
+  rasante: { label: "Vue rasante (°)", value: 62, min: 20, max: 80, step: 1, only: "forge" },
+  incandescence: { label: "Incandescence", value: 1, min: 0, max: 2.5, step: 0.05, only: "forge" },
+  flou: { label: "Profondeur de champ", value: 0.7, min: 0, max: 2, step: 0.05, only: "forge" },
+  raideur: { label: "Levage : raideur du ressort", value: 14, min: 4, max: 80, step: 1 },
+  amorti: { label: "Levage : amortissement", value: 6, min: 1, max: 20, step: 0.5 },
+  finesse: { label: "Maillage (cases par côté)", value: 420, min: 160, max: 700, step: 20 },
+};

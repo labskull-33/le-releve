@@ -1,0 +1,4 @@
+Polices sous licence SIL Open Font License 1.1 (https://openfontlicense.org) :
+- Manrope — Mikhail Sharanda (Google Fonts)
+- Instrument Serif — Instrument (Google Fonts)
+- DM Mono — Colophon Foundry (Google Fonts)

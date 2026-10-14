@@ -1,0 +1,444 @@
+{
+ "auteur": {
+  "nom": "david vuillet",
+  "site": "https://davidvuillet.fr"
+ },
+ "site": "https://davidvuillet.fr",
+ "ciel": {
+  "lieu": "Paris",
+  "latitude": 48.8566,
+  "longitude": 2.3522,
+  "fuseau": "Europe/Paris"
+ },
+ "depots": {
+  "site": "../davidvuillet.fr",
+  "nomore": "../nomore-draft",
+  "briefs": "../brief-academy",
+  "clartefiscale": "../clartefiscale"
+ },
+ "creations": [
+  {
+   "nom": "Le trait",
+   "pas": [],
+   "url": "/trace/",
+   "fr": {
+    "titre": "Tout part d’un <em>point.</em>",
+    "texte": "Une autre façon de visiter : chaque page est un cercle tracé avec la même ouverture de compas."
+   },
+   "en": {
+    "nom": "The line",
+    "titre": "Everything starts from a <em>point.</em>",
+    "texte": "Another way to visit the site: each page is a circle drawn with the same compass opening. You move from one to the next through where they cross, and your visit draws the figure."
+   },
+   "releve": [
+    {
+     "depot": "site",
+     "chemins": [
+      "Accueil/trace",
+      "Accueil/js/trace.js",
+      "Accueil/essais"
+     ]
+    }
+   ]
+  },
+  {
+   "nom": "Fait main",
+   "pas": [
+    1
+   ],
+   "url": "/",
+   "fr": {
+    "titre": "Ce qui sort de la <em>main.</em>",
+    "texte": "Peinture, sculpture numérique, architecture, graphisme : les pièces de la galerie, chacune avec son histoire."
+   },
+   "en": {
+    "nom": "Handmade",
+    "titre": "What comes out of the <em>hand.</em>",
+    "texte": "Painting, digital sculpture, architecture, graphic design: the pieces of the gallery, each with its story."
+   },
+   "releve": [
+    {
+     "depot": "site",
+     "chemins": [
+      "Accueil/fait-main",
+      "Accueil/galerie-calques",
+      "Accueil/index.html"
+     ]
+    }
+   ]
+  },
+  {
+   "nom": "Wabi-Sabi",
+   "pas": [
+    1,
+    1
+   ],
+   "url": "/wabi-sabi/",
+   "fr": {
+    "titre": "Tourné à la <em>main.</em>",
+    "texte": "Le site d’une céramiste à Dieulefit : bols à thé, jarres et grès cuits au bois."
+   },
+   "en": {
+    "nom": "Wabi-Sabi",
+    "titre": "Thrown by <em>hand.</em>",
+    "texte": "The site of a ceramicist in Dieulefit: tea bowls, jars and wood-fired stoneware."
+   },
+   "releve": [
+    {
+     "depot": "site",
+     "chemins": [
+      "Wabi-sabi"
+     ]
+    }
+   ]
+  },
+  {
+   "nom": "Brief Academy",
+   "pas": [
+    1,
+    2
+   ],
+   "url": "/briefs/",
+   "fr": {
+    "titre": "Lire une <em>commande.</em>",
+    "texte": "Tirer une commande de client complète, inventée, avec son budget, ses contraintes et ses surprises, pour s’exercer."
+   },
+   "en": {
+    "nom": "Brief Academy",
+    "titre": "Reading a <em>brief.</em>",
+    "texte": "Draw a complete, made-up client brief, with its budget, constraints and surprises, to practise."
+   },
+   "releve": [
+    {
+     "depot": "briefs",
+     "chemins": [
+      "."
+     ]
+    },
+    {
+     "depot": "site",
+     "chemins": [
+      "Accueil/briefs"
+     ]
+    }
+   ]
+  },
+  {
+   "nom": "ClartéFiscale",
+   "pas": [
+    1,
+    2,
+    2
+   ],
+   "url": "/clartefiscale/",
+   "fr": {
+    "titre": "Vos impôts, case par <em>case.</em>",
+    "texte": "Ce que la déclaration préremplie oublie : garde d’enfants, frais réels, dons. En deux minutes."
+   },
+   "en": {
+    "nom": "ClartéFiscale",
+    "titre": "Your taxes, box by <em>box.</em>",
+    "texte": "What the pre-filled French tax return leaves out: childcare, actual expenses, donations. In two minutes."
+   },
+   "releve": [
+    {
+     "depot": "clartefiscale",
+     "chemins": [
+      "."
+     ]
+    }
+   ]
+  },
+  {
+   "nom": "NoMore Draft",
+   "pas": [
+    2,
+    2
+   ],
+   "url": "/nomore/",
+   "fr": {
+    "titre": "L’atelier de <em>création.</em>",
+    "texte": "Inspiration, planches de tendances, générateurs de prompts image et vidéo. Gratuit, sans compte."
+   },
+   "en": {
+    "nom": "NoMore Draft",
+    "titre": "The creative <em>workshop.</em>",
+    "texte": "Inspiration, trend boards, image and video prompt generators. Free, no account."
+   },
+   "releve": [
+    {
+     "depot": "nomore",
+     "chemins": [
+      ".",
+      ":!retro"
+     ]
+    }
+   ]
+  },
+  {
+   "nom": "L’atelier",
+   "pas": [
+    2
+   ],
+   "url": "/atelier/",
+   "fr": {
+    "titre": "Un atelier, des <em>outils.</em>",
+    "texte": "NoMore Draft pour travailler, Brief Academy pour s’exercer, la rétro-ingénierie pour construire, ClartéFiscale pour le reste."
+   },
+   "en": {
+    "nom": "The atelier",
+    "titre": "One workshop, several <em>tools.</em>",
+    "texte": "NoMore Draft to work, Brief Academy to practise, reverse engineering to build, ClartéFiscale for the rest."
+   },
+   "releve": [
+    {
+     "depot": "site",
+     "chemins": [
+      "Accueil/atelier"
+     ]
+    }
+   ]
+  },
+  {
+   "nom": "Rétro-ingénierie",
+   "pas": [
+    2,
+    3
+   ],
+   "url": "/retro/",
+   "fr": {
+    "titre": "Du croquis au plan <em>coté.</em>",
+    "texte": "Déposez le dessin d’une pièce en acier : en sortent le plan coté, la feuille de débit et les étapes de fabrication."
+   },
+   "en": {
+    "nom": "Reverse engineering",
+    "titre": "From sketch to dimensioned <em>drawing.</em>",
+    "texte": "Drop the drawing of a steel piece: out come the dimensioned plan, the cutting list and the fabrication steps."
+   },
+   "releve": [
+    {
+     "depot": "site",
+     "chemins": [
+      "Outils/Retro-ingenierie",
+      "Creative-lab/retro",
+      "Creative-lab/retro.html",
+      "Creative-lab/src/retro.js",
+      "Creative-lab/src/retro.css"
+     ]
+    },
+    {
+     "depot": "nomore",
+     "chemins": [
+      "retro"
+     ]
+    },
+    {
+     "depot": "nomore",
+     "grep": "r[ée]tro"
+    },
+    {
+     "depot": "site",
+     "chemins": [
+      "Accueil/retro"
+     ]
+    }
+   ]
+  },
+  {
+   "nom": "Chladni",
+   "pas": [
+    3,
+    3
+   ],
+   "url": "/chladni/",
+   "fr": {
+    "titre": "La fréquence crée la <em>forme.</em>",
+    "texte": "Du sable sur une plaque d’acier : chaque note dessine sa figure."
+   },
+   "en": {
+    "nom": "Chladni",
+    "titre": "Frequency makes <em>form.</em>",
+    "texte": "Sand on a steel plate: every note draws its own figure."
+   },
+   "releve": [
+    {
+     "depot": "site",
+     "chemins": [
+      "Chladni"
+     ]
+    }
+   ]
+  },
+  {
+   "nom": "Héros animés",
+   "pas": [
+    3
+   ],
+   "url": "/heros/",
+   "fr": {
+    "titre": "Ce qu’on voit <em>d’abord.</em>",
+    "texte": "Le haut d’une page, qui répond à la main avant de parler."
+   },
+   "en": {
+    "nom": "Animated heroes",
+    "titre": "What you see <em>first.</em>",
+    "texte": "The top of a page, answering the hand before it speaks."
+   },
+   "releve": [
+    {
+     "depot": "site",
+     "chemins": [
+      "Creative-lab"
+     ]
+    }
+   ]
+  },
+  {
+   "nom": "Tout se tient",
+   "pas": [
+    4
+   ],
+   "url": "/tout-se-tient/",
+   "fr": {
+    "titre": "Tout se <em>tient.</em>",
+    "texte": "Une structure qu’on tire, qu’on hisse, qu’on tend, et qui tient."
+   },
+   "en": {
+    "nom": "It all holds",
+    "titre": "It all <em>holds.</em>",
+    "texte": "A structure you pull, hoist, tighten, and that holds."
+   },
+   "releve": [
+    {
+     "depot": "site",
+     "chemins": [
+      "Tout-se-tient"
+     ]
+    }
+   ]
+  },
+  {
+   "nom": "Parcours",
+   "pas": [
+    5
+   ],
+   "url": "/cv/",
+   "fr": {
+    "titre": "Trois métiers, une même <em>main.</em>",
+    "texte": "Le parcours, dessiné sur papier comme un plan."
+   },
+   "en": {
+    "nom": "Background",
+    "titre": "Three trades, one <em>hand.</em>",
+    "texte": "The career path, drawn on paper like a plan."
+   },
+   "releve": [
+    {
+     "depot": "site",
+     "chemins": [
+      "Accueil/cv"
+     ]
+    }
+   ]
+  },
+  {
+   "nom": "Midjourney",
+   "pas": [
+    6
+   ],
+   "url": "/midjourney/",
+   "fr": {
+    "titre": "Un prompt fait pour <em>Midjourney.</em>",
+    "texte": "Dix-sept versions et leurs paramètres, sept cents artistes, et les leviers d’une image forte."
+   },
+   "en": {
+    "nom": "Midjourney",
+    "titre": "A prompt made for <em>Midjourney.</em>",
+    "texte": "Seventeen versions and their parameters, seven hundred artists, and the levers of a strong image."
+   },
+   "releve": [
+    {
+     "depot": "site",
+     "chemins": [
+      "Accueil/midjourney"
+     ]
+    }
+   ]
+  },
+  {
+   "nom": "Pilule rouge",
+   "pas": [
+    6,
+    6
+   ],
+   "url": "/pilule-rouge/",
+   "fr": {
+    "titre": "Sortir de la <em>caverne.</em>",
+    "texte": "Un mur d’ombres numériques, une fente de lumière, et un site qui change quand on choisit de sortir."
+   },
+   "en": {
+    "nom": "Red pill",
+    "titre": "Leaving the <em>cave.</em>",
+    "texte": "A wall of digital shadows, a slit of light, and a site that changes when you choose to step out."
+   },
+   "releve": [
+    {
+     "depot": "site",
+     "chemins": [
+      "Pilule Rouge"
+     ]
+    }
+   ]
+  },
+  {
+   "nom": "Réalisations",
+   "pas": [
+    3,
+    4
+   ],
+   "url": "/realisations/",
+   "fr": {
+    "titre": "Ce qui en <em>sort.</em>",
+    "texte": "Tous les sites nés de l’atelier et du labo, une planche chacun, du plus récent au plus ancien."
+   },
+   "en": {
+    "nom": "Finished work",
+    "titre": "What comes <em>out of it.</em>",
+    "texte": "Every site born from the atelier and the lab, one sheet each, newest first."
+   },
+   "releve": [
+    {
+     "depot": "site",
+     "chemins": [
+      "Accueil/realisations"
+     ]
+    }
+   ]
+  },
+  {
+   "nom": "Design système",
+   "pas": [
+    4,
+    5
+   ],
+   "url": "/design-systeme/",
+   "fr": {
+    "titre": "La trame, <em>cotée.</em>",
+    "texte": "Papier, charbon, un seul bronze : les couleurs, les polices, les hauteurs et les pièces que toutes les pages partagent."
+   },
+   "en": {
+    "nom": "Design system",
+    "titre": "The frame, <em>dimensioned.</em>",
+    "texte": "Paper, charcoal, a single bronze: the colours, typefaces, heights and pieces every page shares."
+   },
+   "releve": [
+    {
+     "depot": "site",
+     "chemins": [
+      "Accueil/design-systeme"
+     ]
+    }
+   ]
+  }
+ ]
+}
